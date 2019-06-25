@@ -1,26 +1,22 @@
 import React from "react";
 import { connect } from "react-redux";
-import {getCharacter} from "../actions"
 
 import { CharacterList } from "../components";
-// import actions
+import { fetch_chars } from '../actions';
 
 class CharacterListView extends React.Component {
   constructor() {
     super();
+    //that's right, no state here. wow.
   }
 
   componentDidMount() {
-      this.props.getCharacter()
-    // call our action
+    this.props.fetch_chars();
   }
-  
 
   render() {
-    console.log(this.props.isfetching)
-    console.log(this.props.characters)
     if (this.props.fetching) {
-      <h1> Loading......</h1>
+     return  <h2>Hold your horses, we are loading.</h2>
     }
     return (
       <div className="CharactersList_wrapper">
@@ -29,17 +25,19 @@ class CharacterListView extends React.Component {
     );
   }
 }
+function mapStateToProps(state) {
+  console.log(state);
+  return {
+    characters: state.charsReducer.characters,
+    fetching: state.charsReducer.fetching,
+    // do i need the error property on props too? that seems like a strange omission.
 
-// our mapStateToProps needs to have two properties inherited from state
-// the characters and the fetching boolean
-const mapStateToProps = state =>{
-  console.log(state)
-  return{
-  characters: state.charsReducer.characters,
-  isfetching: state.charsReducer.isfetching}
 
   }
+
+
+};
 export default connect(
-  mapStateToProps,  /* mapStateToProps replaces null here */
-  {getCharacter}
+  mapStateToProps,
+  { fetch_chars }
 )(CharacterListView);
